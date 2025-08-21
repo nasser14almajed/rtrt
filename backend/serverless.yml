@@ -1,0 +1,17 @@
+service: universal-backend
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+    SQLITE_URL: ${env:SQLITE_URL}
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+
+functions:
+  api:
+    handler: dist/handler.cjs
+    events:
+      - httpApi: '*'

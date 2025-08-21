@@ -1,0 +1,2 @@
+# Dev proxy tip
+If your frontend dev server supports proxy (Vite/Next custom dev server), proxy `/api` to `http://localhost:8080` to avoid CORS.

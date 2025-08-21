@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = env("DATABASE_URL") != "" ? "postgresql" : "sqlite"
+  url      = env("DATABASE_URL") != "" ? env("DATABASE_URL") : env("SQLITE_URL")
+}
+
+model Form {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  fields      Field[]
+  submissions Submission[]
+}
+
+model Field {
+  id        String   @id @default(cuid())
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  formId    String
+  label     String
+  type      String
+  required  Boolean  @default(false)
+  options   Json?
+  order     Int
+}
+
+model Submission {
+  id        String   @id @default(cuid())
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  formId    String
+  createdAt DateTime @default(now())
+  values    SubmissionValue[]
+}
+
+model SubmissionValue {
+  id           String   @id @default(cuid())
+  submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  submissionId String
+  fieldId      String
+  value        String
+}
